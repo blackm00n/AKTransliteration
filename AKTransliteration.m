@@ -54,6 +54,12 @@
   return self;
 }
 
+-(void)dealloc
+{
+  self.sortedKeys = nil;
+  self.rules = nil;
+}
+
 +(NSString*)rulesFileNameForDirection:(e_TransliterateDirection)direction
 {
   switch( direction ) {
