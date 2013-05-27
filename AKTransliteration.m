@@ -92,7 +92,7 @@
   NSMutableString* result = [[NSMutableString alloc] initWithCapacity:string.length];
   for( int i = 0; i < string.length; ++i ) {
     unichar character = [string characterAtIndex:i];
-    NSString* characterString = [NSString stringWithCharacters:&character length:1];
+    NSString* characterString = [[NSString stringWithCharacters:&character length:1] lowercaseString];
     // Find first match
     NSInteger keyIndex = NSNotFound;
     NSNumber* startSearchIndex = self.firstLetterIndex[characterString];
