@@ -60,6 +60,10 @@
 	<string>ай</string>
 	<key>ch</key>
 	<string>ч</string>
+	<key>ee</key>
+	<string>и</string>
+	<key>ea</key>
+	<string>и</string>
 	<key>ey</key>
 	<string>эй</string>
 	<key>iy</key>
@@ -68,6 +72,8 @@
 	<string>ж</string>
 	<key>kh</key>
 	<string>х</string>
+	<key>oo</key>
+	<string>у</string>
 	<key>oy</key>
 	<string>ой</string>
 	<key>qu</key>
