@@ -88,7 +88,16 @@
 
 -(NSString*)transliterate:(NSString*)string
 {
-  NSCharacterSet* uppercasedLetters = [NSCharacterSet uppercaseLetterCharacterSet];
+  NSString* result = nil;
+  [self transliterate:string into:&result];
+  return result;
+}
+
+-(BOOL)transliterate:(NSString*)string into:(NSString**)returnResult
+{
+  BOOL success = YES;
+  NSCharacterSet* letters = [NSCharacterSet letterCharacterSet];
+  NSCharacterSet* uppercaseLetters = [NSCharacterSet uppercaseLetterCharacterSet];
   NSMutableString* result = [[NSMutableString alloc] initWithCapacity:string.length];
   for( int i = 0; i < string.length; ++i ) {
     unichar character = [string characterAtIndex:i];
@@ -109,6 +118,9 @@
     }
     // Append right rule part to result
     if( keyIndex == NSNotFound ) {
+      if( [letters characterIsMember:character] ) {
+        success = NO;
+      }
       [result appendString:characterString];
     } else {
       NSString* toAppend = nil;
@@ -123,7 +135,7 @@
       } else {
         NSAssert( NO, @"Right part of rule should be string or array of strings." );
       }
-      if( [uppercasedLetters characterIsMember:character] ) {
+      if( [uppercaseLetters characterIsMember:character] ) {
         toAppend = [toAppend capitalizedString];
       }
       [result appendString:toAppend];
@@ -131,7 +143,10 @@
       i += ((NSString*)[self.sortedKeys objectAtIndex:keyIndex]).length - 1;
     }
   }
-  return result;
+  if( returnResult ) {
+    *returnResult = result;
+  }
+  return success;
 }
 
 @end

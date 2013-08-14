@@ -33,5 +33,6 @@ typedef enum {
 -(id)initForDirection:(e_TransliterateDirection)direction;
 
 -(NSString*)transliterate:(NSString*)string;
+-(BOOL)transliterate:(NSString*)string into:(NSString**)result;
 
 @end
