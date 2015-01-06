@@ -1,7 +1,7 @@
 AKTransliteration
 =================
 
-Simple cyrillic &lt;-> english transliteration utils for iOS in Objective-C
+Simple rule based transliteration for iOS in Objective-C
 
 Notes
 =================
