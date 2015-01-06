@@ -5,6 +5,7 @@
 
 #import "ViewController.h"
 #import "AKTransliteration.h"
+#import "AKBuiltInRules.h"
 
 @interface ViewController ()
 
@@ -38,7 +39,7 @@
 - (AKTransliteration*)transliteration
 {
     if (_transliteration == nil) {
-        _transliteration = [[AKTransliteration alloc] initForDirection:TD_EnRu];
+        _transliteration = [[AKTransliteration alloc] initWithRules:[AKBuiltInRules rulesForDirection:TD_EnRu]];
     }
     return _transliteration;
 }

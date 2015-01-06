@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		8AF7A2A71A5C55FE00F3B157 /* libAKTransliteration.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AF7A29B1A5C55FE00F3B157 /* libAKTransliteration.a */; };
 		8AF7A2B91A5C56A300F3B157 /* AKTransliteration.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF7A2B61A5C56A300F3B157 /* AKTransliteration.m */; };
+		ABA7BC20E81C7BEAD671EBF6 /* AKBuiltInRules.m in Sources */ = {isa = PBXBuildFile; fileRef = ABA7B81864C48ABBDA61CF0E /* AKBuiltInRules.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +43,8 @@
 		8AF7A2B71A5C56A300F3B157 /* EnRuRules.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = EnRuRules.plist; sourceTree = SOURCE_ROOT; };
 		8AF7A2B81A5C56A300F3B157 /* RuEnRules.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = RuEnRules.plist; sourceTree = SOURCE_ROOT; };
 		8AF7A2BA1A5C57EF00F3B157 /* AKTransliteration-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AKTransliteration-Prefix.pch"; sourceTree = SOURCE_ROOT; };
+		ABA7B81864C48ABBDA61CF0E /* AKBuiltInRules.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AKBuiltInRules.m; sourceTree = SOURCE_ROOT; };
+		ABA7BD29D19714F7E2548987 /* AKBuiltInRules.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AKBuiltInRules.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +92,8 @@
 				8AF7A2B71A5C56A300F3B157 /* EnRuRules.plist */,
 				8AF7A2B81A5C56A300F3B157 /* RuEnRules.plist */,
 				8AF7A2BB1A5C580700F3B157 /* Supporting Files */,
+				ABA7B81864C48ABBDA61CF0E /* AKBuiltInRules.m */,
+				ABA7BD29D19714F7E2548987 /* AKBuiltInRules.h */,
 			);
 			path = AKTransliteration;
 			sourceTree = "<group>";
@@ -206,6 +211,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8AF7A2B91A5C56A300F3B157 /* AKTransliteration.m in Sources */,
+				ABA7BC20E81C7BEAD671EBF6 /* AKBuiltInRules.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

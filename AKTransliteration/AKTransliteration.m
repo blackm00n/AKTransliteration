@@ -7,24 +7,24 @@
 
 @interface AKTransliteration ()
 
-@property(nonatomic, strong) NSArray* sortedKeys;
-@property(nonatomic, strong) NSDictionary* firstLetterIndex;
-@property(nonatomic, strong) NSDictionary* rules;
+@property(nonatomic, readonly) NSArray* sortedKeys;
+@property(nonatomic, readonly) NSDictionary* firstLetterIndex;
+@property(nonatomic, readonly) NSDictionary* rules;
 
 @end
 
 @implementation AKTransliteration
 
--(id)initForDirection:(e_TransliterateDirection)direction
+-(instancetype)initWithRules:(NSDictionary*)rules;
 {
   self = [super init];
-  if( !self ) {
+  if( self == nil ) {
     return nil;
   }
-  NSString* path = [[NSBundle mainBundle] pathForResource:[AKTransliteration rulesFileNameForDirection:direction]
-                                                   ofType:@"plist"];
-  self.rules = [NSDictionary dictionaryWithContentsOfFile:path];
-  self.sortedKeys = [[self.rules allKeys] sortedArrayUsingComparator:^NSComparisonResult(NSString* obj1, NSString* obj2) {
+
+  _rules = rules;
+
+  _sortedKeys = [[self.rules allKeys] sortedArrayUsingComparator:^NSComparisonResult(NSString* obj1, NSString* obj2) {
     // 'ab' should be before 'a'
     if( [obj1 hasPrefix:obj2] ) {
       return NSOrderedAscending;
@@ -34,38 +34,20 @@
       return [obj1 compare:obj2];
     }
   }];
-  NSMutableDictionary* firstLetterIndex = [NSMutableDictionary dictionary];
-  for( int i = 0; i < self.sortedKeys.count; ++i ) {
-    NSString* key = self.sortedKeys[i];
-    NSString* firstLetter = [key substringToIndex:1];
-    if( ![firstLetterIndex objectForKey:firstLetter] ) {
-      [firstLetterIndex setObject:@(i) forKey:firstLetter];
+
+  _firstLetterIndex = ({
+    NSMutableDictionary* result = [NSMutableDictionary dictionary];
+    for( NSUInteger i = 0; i < self.sortedKeys.count; ++i ) {
+      NSString* key = self.sortedKeys[i];
+      NSString* firstLetter = [key substringToIndex:1];
+      if( result[firstLetter] == nil ) {
+        result[firstLetter] = @(i);
+      }
     }
-  }
-  self.firstLetterIndex = firstLetterIndex;
+    result;
+  });
+
   return self;
-}
-
--(void)dealloc
-{
-  self.firstLetterIndex = nil;
-  self.sortedKeys = nil;
-  self.rules = nil;
-}
-
-+(NSString*)rulesFileNameForDirection:(e_TransliterateDirection)direction
-{
-  switch( direction ) {
-    case TD_RuEn:
-      return @"RuEnRules";
-    case TD_EnRu:
-      return @"EnRuRules";
-    default:
-    {
-      COMPILE_ASSERT( TD_Count == 2 );
-    }
-  }
-  return nil;
 }
 
 -(NSString*)transliterate:(NSString*)string
@@ -81,14 +63,14 @@
   NSCharacterSet* letters = [NSCharacterSet letterCharacterSet];
   NSCharacterSet* uppercaseLetters = [NSCharacterSet uppercaseLetterCharacterSet];
   NSMutableString* result = [[NSMutableString alloc] initWithCapacity:string.length];
-  for( int i = 0; i < string.length; ++i ) {
+  for( NSUInteger i = 0; i < string.length; ++i ) {
     unichar character = [string characterAtIndex:i];
     NSString* characterString = [[NSString stringWithCharacters:&character length:1] lowercaseString];
     // Find first match
-    NSInteger keyIndex = NSNotFound;
+    NSUInteger keyIndex = NSNotFound;
     NSNumber* startSearchIndex = self.firstLetterIndex[characterString];
     if( startSearchIndex ) {
-      for( int k = [startSearchIndex intValue]; k < self.sortedKeys.count; ++k ) {
+      for( NSUInteger k = [startSearchIndex unsignedIntegerValue]; k < self.sortedKeys.count; ++k ) {
         NSString* key = self.sortedKeys[k];
         if( i + key.length <= string.length
            && [[string substringWithRange:NSMakeRange(i, key.length)] caseInsensitiveCompare:key] == NSOrderedSame )
@@ -106,8 +88,8 @@
       [result appendString:characterString];
     } else {
       NSString* toAppend = nil;
-      id value = [self.rules valueForKey:[self.sortedKeys objectAtIndex:keyIndex]];
-      if( !value ) {
+      id value = [self.rules valueForKey:self.sortedKeys[keyIndex]];
+      if( value == nil ) {
         continue;
       }
       if( [value isKindOfClass:[NSString class]] ) {
@@ -115,14 +97,14 @@
       } else if( [value isKindOfClass:[NSArray class]] ) {
         toAppend = [value objectAtIndex:0];
       } else {
-        NSAssert( NO, @"Right part of rule should be string or array of strings." );
+        NSAssert(NO, @"Right part of rule should be string or array of strings.");
       }
       if( [uppercaseLetters characterIsMember:character] ) {
         toAppend = [toAppend capitalizedString];
       }
       [result appendString:toAppend];
       // If left rule part is more than one symbol
-      i += ((NSString*)[self.sortedKeys objectAtIndex:keyIndex]).length - 1;
+      i += ((NSString*)self.sortedKeys[keyIndex]).length - 1;
     }
   }
   if( returnResult ) {
